@@ -4,7 +4,7 @@ Add region to your knife configuration:
   knife[:rackspace_api_region] = "ord"
 
 ==Commands
-List:
+Instance List:
   bundle exec knife rackspace database list
 
 Show:
