@@ -13,7 +13,6 @@ class Chef
         end
       end
 
-
       def db_connection
         @connection ||= Fog::Rackspace::Databases.new(db_connection_params)
       end
@@ -29,18 +28,6 @@ class Chef
         # reuse the knife rackspace connection params ( but we don't want provider here )
         connection_params(:rackspace_region => Chef::Config[:knife][:rackspace_api_region]).except(:provider)
       end
-
-      # def rackspace_api_credentials
-      #   {
-      #     :username => Chef::Config[:knife][:rackspace_api_username],
-      #     :api_key => Chef::Config[:knife][:rackspace_api_key],
-      #     :region => Chef::Config[:knife][:rackspace_api_region]
-      #   }
-      # end
-
-      # def lb_connection
-      #   @lb_connection ||= CloudLB::Connection.new(rackspace_api_credentials)
-      # end
     end
   end
 end

@@ -22,6 +22,7 @@ module KnifePlugins
       ]
 
       db_connection.instances.all.each do |instance|
+        instance.reload
         instance_list << instance.id.to_s
         instance_list << instance.name
         instance_list << instance.hostname
