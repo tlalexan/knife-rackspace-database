@@ -1,9 +1,9 @@
 $:.push File.expand_path("../lib", __FILE__)
-require "version"
+require "knife-rackspace-database/version"
 
 Gem::Specification.new do |s|
   s.name = "knife-rackspace-database"
-  s.version = Knife::Rackspace::Database::VERSION
+  s.version = Knife::RackspaceDatabase::VERSION
   s.authors = ["Tom Alexandrowicz"]
   s.email = "talexand@thoughtworks.com"
   s.summary = "Rackspace cloud database support for knife"
