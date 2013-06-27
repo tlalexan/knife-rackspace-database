@@ -3,28 +3,24 @@ require 'chef/knife/rackspace_base'
 require 'chef/knife/rackspace_database_instance_related'
 
 module KnifePlugins
-  class RackspaceDatabaseDbList < Chef::Knife
+  class RackspaceDatabaseDbCreate < Chef::Knife
 
     include Chef::Knife::RackspaceBase
     include Chef::Knife::RackspaceDatabaseBase
     include Chef::Knife::RackspaceDatabaseInstanceRelated
 
-    banner "knife rackspace database db list INSTANCE_NAME"
+    banner "knife rackspace database db create INSTANCE_NAME DB_NAME"
 
     def run
       $stdout.sync = true
 
       pop_instance_arg
+      db_name = pop_arg("DB_NAME")
 
-      db_list = [
-          ui.color('Name', :bold)
-      ]
+      db = @instance.databases.new(:name => db_name)
+      db.save
 
-      @instance.databases.each do |database|
-        db_list << database.name
-      end
-
-      puts ui.list(db_list, :uneven_columns_across, 1)
+      msg_pair("Name", db.name)
     end
 
   end

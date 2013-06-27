@@ -8,13 +8,7 @@ module KnifePlugins
     include Chef::Knife::RackspaceBase
     include Chef::Knife::RackspaceDatabaseBase
 
-    banner "knife rackspace database instance create"
-
-    option :name,
-           :short => "-N NAME",
-           :long => "--name NAME",
-           :description => "The instance name; default is a rs-{random number}",
-           :default => "rs-#{rand.to_s.split('.')[1]}"
+    banner "knife rackspace database instance create INSTANCE_NAME"
 
     option :flavor,
            :short => "-f FLAVOR",
@@ -36,7 +30,15 @@ module KnifePlugins
     def run
       $stdout.sync = true
 
-      instance = db_connection.instances.new(:name => config[:name],
+      if @name_args.first.nil?
+        show_usage
+        error("INSTANCE_NAME is required")
+        exit 1 
+      end
+
+      instance_name = @name_args.first
+
+      instance = db_connection.instances.new(:name => instance_name,
                                          :flavor_id => config[:flavor],
                                          :volume_size => config[:size])
       instance.save
