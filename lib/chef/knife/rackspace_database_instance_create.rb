@@ -32,7 +32,7 @@ module KnifePlugins
 
       if @name_args.first.nil?
         show_usage
-        error("INSTANCE_NAME is required")
+        ui.error("INSTANCE_NAME is required")
         exit 1 
       end
 
