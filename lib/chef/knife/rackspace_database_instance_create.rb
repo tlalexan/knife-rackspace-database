@@ -1,12 +1,14 @@
 require 'chef/knife'
 require 'chef/knife/rackspace_base'
 require 'chef/knife/rackspace_database_base'
+require 'chef/knife/rackspace_dns_base'
 
 module KnifePlugins
   class RackspaceDatabaseInstanceCreate < Chef::Knife
 
     include Chef::Knife::RackspaceBase
     include Chef::Knife::RackspaceDatabaseBase
+    include Chef::Knife::RackspaceDnsBase
 
     banner "knife rackspace database instance create INSTANCE_NAME"
 
@@ -26,6 +28,12 @@ module KnifePlugins
            :long => "--instance-create-timeout timeout",
            :description => "How long to wait until the instance is ready; default is 600 seconds",
            :default => 600
+
+    option :fqdn,
+      :long => "-add-fqdn FQDN",
+      :short => "-D FQDN",
+      :description => "Creates an 'CNAME' record in Cloud DNS",
+      :default => ""
            
     def run
       $stdout.sync = true
@@ -50,8 +58,32 @@ module KnifePlugins
 
       instance.wait_for(Integer(config[:instance_create_timeout])) { print "."; ready? }
       puts
-
+      
       msg_pair("Hostname", instance.hostname)
+
+      if (config[:fqdn])
+        fqdn = config[:fqdn]
+        fqdn_match = fqdn.match(/^([^.]*)\.(.*)$/i)
+        if !fqdn_match
+          ui.error("'#{fqdn}' is not a valid fqdn (e.g. test.example.com)")
+          exit 1 
+        end
+
+        server_name, zone_name = fqdn_match.captures
+
+        zone = dns_service.zones.find {|z| z.domain == zone_name }  
+
+        if !zone
+          ui.error("Could not find Rackspace DNS zone for '#{zone_name}'")
+          exit 1 
+        end
+
+        zone.records.create(:type => 'CNAME', :name => fqdn, :value => instance.hostname)
+        msg_pair("DNS", fqdn)
+      end
+
+
+      
     end
 
   end

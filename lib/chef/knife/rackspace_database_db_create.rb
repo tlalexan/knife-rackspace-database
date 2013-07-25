@@ -9,7 +9,7 @@ module KnifePlugins
     include Chef::Knife::RackspaceDatabaseBase
     include Chef::Knife::RackspaceDatabaseInstanceRelated
 
-    banner "knife rackspace database db create INSTANCE_NAME DB_NAME"
+    banner "knife rackspace database db create INSTANCE_NAME DB_NAME DOMAIN"
 
     def run
       $stdout.sync = true

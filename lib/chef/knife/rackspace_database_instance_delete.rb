@@ -19,13 +19,14 @@ module KnifePlugins
     def run
       $stdout.sync = true
 
-      instances = @name_args.map do |instance_name| 
-        instance = db_connection.instances.find { |i| i.name == instance_name }
-        if instance.nil? 
+      instances = []
+      @name_args.each do |instance_name| 
+        found_instances = db_connection.instances.find_all { |i| i.name == instance_name }
+        if found_instances.empty? 
             ui.error("Instance #{instance_name} not found")
             exit 1
         end
-        instance
+        instances.concat found_instances
       end
 
       if instances.empty?
