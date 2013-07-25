@@ -63,15 +63,8 @@ module KnifePlugins
 
       if (config[:fqdn])
         fqdn = config[:fqdn]
-        fqdn_match = fqdn.match(/^([^.]*)\.(.*)$/i)
-        if !fqdn_match
-          ui.error("'#{fqdn}' is not a valid fqdn (e.g. test.example.com)")
-          exit 1 
-        end
-
-        server_name, zone_name = fqdn_match.captures
-
-        zone = dns_service.zones.find {|z| z.domain == zone_name }  
+        
+        zone = zone_for fqdn
 
         if !zone
           ui.error("Could not find Rackspace DNS zone for '#{zone_name}'")

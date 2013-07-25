@@ -9,7 +9,6 @@ module KnifePlugins
 
     banner "knife rackspace dns zone create ZONE_NAME EMAIL"
 
-
     def run
       $stdout.sync = true
 
