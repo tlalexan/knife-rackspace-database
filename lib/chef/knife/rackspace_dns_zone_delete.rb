@@ -22,6 +22,11 @@ module KnifePlugins
 
       zone = load_zone @zone_name
 
+      if zone.nil?
+        ui.error("Zone #{@zone_name} not found")
+        exit 1
+      end
+
       msg_pair("Domain", zone.domain)      
       msg_pair("Administrator Email", zone.email)      
 
