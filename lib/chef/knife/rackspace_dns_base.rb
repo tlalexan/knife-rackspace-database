@@ -17,9 +17,13 @@ class Chef
 
         zone_name = fqdn_match.captures.first
 
-        dns_service.zones.find {|z| z.domain == zone_name }  
-        
+        load_zone zone_name
       end
+
+      def load_zone(zone_name)
+        dns_service.zones.find {|z| z.domain == zone_name }  
+      end
+
     end
   end
 end

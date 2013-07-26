@@ -9,12 +9,6 @@ module KnifePlugins
     include Chef::Knife::RackspaceDatabaseBase
     include Chef::Knife::RackspaceDatabaseInstanceRelated
 
-    option :force,
-           :short => "-f",
-           :long => "--force",
-           :boolean => true,
-           :description => "Skip user prompts"
-
     banner "knife rackspace database user delete INSTANCE_NAME USER_NAME [USER_NAME ...]"
 
     def run
@@ -37,14 +31,12 @@ module KnifePlugins
           exit 1
       end
 
-      unless config[:force]
-        if users.count > 1
-          msg_pair("User Names", users.map {|u| u.name }.join(", "))
-          ui.confirm("Do you really want to delete these users")
-        else
-          msg_pair("User Name", users.first.name)
-          ui.confirm("Do you really want to delete this user")
-        end
+      if users.count > 1
+        msg_pair("User Names", users.map {|u| u.name }.join(", "))
+        ui.confirm("Do you really want to delete these users")
+      else
+        msg_pair("User Name", users.first.name)
+        ui.confirm("Do you really want to delete this user")
       end
 
       users.each do |user|
