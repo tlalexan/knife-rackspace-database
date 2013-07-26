@@ -30,6 +30,11 @@ module KnifePlugins
       zone = dns_service.zones.new({:domain => @zone_name, :email => @zone_email, :ttl => config[:ttl]})
       zone.save
 
+      # There's a bug in fog where it doesn't set this on create
+      zone.ttl = config[:ttl]
+      zone.save
+      zone.reload
+
       msg_pair("Domain", zone.domain)      
       msg_pair("Administrator Email", zone.email)      
       msg_pair("TTL", zone.ttl)      
