@@ -14,6 +14,11 @@ module KnifePlugins
            :description => "DNS record type (default: A)",
            :default => "A"
 
+    option :ttl,
+           :short => "-l",
+           :long => "--ttl SECONDS",
+           :description => "TTL in seconds (default 300)",
+           :default => "300"
 
     option :server_name,
            :short => "-S",
@@ -40,12 +45,13 @@ module KnifePlugins
 
       zone = zone_for @fqdn
 
-      zone.records.create(:type => config[:type], :name => @fqdn, :value => @value)
+      record = zone.records.create(:type => config[:type], :name => @fqdn, :value => @value, :ttl => config[:ttl])
 
       msg_pair("Zone", zone.domain)
-      msg_pair("FQDN", @fqdn)
-      msg_pair("Value", @value)
-      msg_pair("Type", config[:type])
+      msg_pair("Name", record.name)
+      msg_pair("Value", record.value)
+      msg_pair("Type", record.type)
+      msg_pair("TTL", record.ttl) 
     end
 
   end

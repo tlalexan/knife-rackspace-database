@@ -7,6 +7,12 @@ module KnifePlugins
     include Chef::Knife::RackspaceBase
     include Chef::Knife::RackspaceDnsBase
 
+    option :ttl,
+           :short => "-l",
+           :long => "--ttl SECONDS",
+           :description => "TTL in seconds (default 300)",
+           :default => "300"
+
     banner "knife rackspace dns zone create ZONE_NAME EMAIL"
 
     def run
@@ -21,11 +27,12 @@ module KnifePlugins
         exit 1
       end
 
-      zone = dns_service.zones.new({:domain=> @zone_name, :email=> @zone_email})
+      zone = dns_service.zones.new({:domain => @zone_name, :email => @zone_email, :ttl => config[:ttl]})
       zone.save
 
       msg_pair("Domain", zone.domain)      
       msg_pair("Administrator Email", zone.email)      
+      msg_pair("TTL", zone.ttl)      
     end
 
   end
