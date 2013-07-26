@@ -30,10 +30,16 @@ module KnifePlugins
            :default => 600
 
     option :fqdn,
-      :long => "-add-fqdn FQDN",
-      :short => "-D FQDN",
-      :description => "Creates an 'CNAME' record in Cloud DNS",
-      :default => ""
+            :long => "-add-fqdn FQDN",
+            :short => "-D FQDN",
+            :description => "Creates an 'CNAME' record in Cloud DNS",
+            :default => ""
+
+    option :ttl,
+           :short => "-l",
+           :long => "--ttl SECONDS",
+           :description => "DNS TTL in seconds (default 300)",
+           :default => "300"
            
     def run
       $stdout.sync = true
@@ -71,11 +77,10 @@ module KnifePlugins
           exit 1 
         end
 
-        zone.records.create(:type => 'CNAME', :name => fqdn, :value => instance.hostname)
+        zone.records.create(:type => 'CNAME', :name => fqdn, :value => instance.hostname, :ttl => config[:ttl])
         msg_pair("DNS", fqdn)
+        msg_pair("DNS TTL", config[:ttl])
       end
-
-
       
     end
 
