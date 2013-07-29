@@ -9,20 +9,33 @@ class Chef
       end
 
       def zone_for(fqdn)
-        fqdn_match = fqdn.match(/^[^.]*\.(.*)$/i)
-        if !fqdn_match
+        parts = fqdn.split('.')
+        if parts.count < fqdn_min_size
           ui.error("'#{fqdn}' is not a valid fqdn (e.g. test.example.com)")
           exit 1 
         end
-
-        zone_name = fqdn_match.captures.first
-
+        
+        zone_name = parts.count > fqdn_min_size ? three_parts_zone_name(parts) : two_parts_zone_name(parts) 
         load_zone zone_name
+      end
+
+      private
+      def three_parts_zone_name(parts)
+        parts.last(3).join('.')
+      end
+
+      def two_parts_zone_name(parts)
+        parts.last(2).join('.')
+      end
+
+      def fqdn_min_size
+        3
       end
 
       def load_zone(zone_name)
         dns_service.zones.find {|z| z.domain == zone_name }  
       end
+
 
     end
   end
