@@ -37,11 +37,9 @@ module KnifePlugins
       create_options = {:key => @name_args.first, :public => true}
 
       container = cloud_files_service.directories.create(create_options)
-      
-      host = URI(container.public_url).host
-
-      msg_pair("Public URL", container.public_url)
-
+      uris = container.send(:urls)
+      host = URI(uris[:uri]).host
+      msg_pair("SSL URL", container.public_url)
 
       if (config[:fqdn])
         fqdn = config[:fqdn]
