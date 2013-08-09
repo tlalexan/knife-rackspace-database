@@ -1,7 +1,6 @@
 require 'chef/knife'
 require 'chef/knife/rackspace_base'
 require 'chef/knife/rackspace_dns_base'
-require 'json'
 
 module KnifePlugins
   class RackspaceDnsRecordDelete < Chef::Knife
@@ -29,7 +28,7 @@ module KnifePlugins
       ui.info "No DNS records to delete." if records_to_delete.length == 0
       records_to_delete.each do |record|
         ui.info("Deleting dns record for ...")
-        msg_pair("Name", record.id)
+        msg_pair("ID", record.id)
         msg_pair("Name", record.name)
         msg_pair("Value", record.value)
         msg_pair("Type", record.type)
