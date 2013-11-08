@@ -13,6 +13,6 @@ Gem::Specification.new do |s|
   s.files = `git ls-files`.split("\n")
   s.add_dependency "chef", ">= 0.10.8"
   s.add_dependency "knife-rackspace", "~> 0.8.0"
-  s.add_dependency "fog", "~> 1.12"
+  s.add_dependency "fog", "~> 1.18"
   s.require_paths = ["lib"]
 end
